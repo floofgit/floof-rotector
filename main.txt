@@ -6,7 +6,7 @@
 --available at https://roscoe.rotector.com/docs
 --the extension they made for your browser is at https://rotector.com/
 --lots of love from floof 
---currently at V.1.0
+--currently at V.1.0 as of april 1st 2026 20:07 BST
 
 local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService")
