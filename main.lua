@@ -6,7 +6,7 @@
 --available at https://roscoe.rotector.com/docs
 --the extension they made for your browser is at https://rotector.com/
 --lots of love from floof 
---currently at V.1.0 as of april 1st 2026 20:07 BST
+--currently at V.1.0 as of april 1st 2026 20:45 BST
 
 local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService")
@@ -14,10 +14,10 @@ local UserInputService = game:GetService("UserInputService")
 local LocalPlayer = Players.LocalPlayer
 
 local request = (syn and syn.request) or (http and http.request) or http_request or request
-
+print("Current JobId: " .. game.JobId)
 -- // CONFIGURATION
-local SHOW_CONSOLE_BUTTON = true
-local FILE_NAME = "Roscoe_Config.json"
+local SHOW_CONSOLE_BUTTON = false -- this shows the log console i guess 
+local FILE_NAME = "rotector-client-discord-bot-token-for-api-lmao.json"
 local DISCORD_TOKEN = ""
 
 -- FILE SAVING LOGIC
@@ -43,13 +43,13 @@ end
 
 loadConfig()
 
--- Dimensions (Reduced by 15%)
+-- Dimensions
 local WIDTH = 638
 local HEIGHT_NORMAL = 552
 local MIN_SIZE = UDim2.new(0, 55, 0, 55)
 
 local gui = Instance.new("ScreenGui")
-gui.Name = "Roscoe_Ultimate_V7_Small"
+gui.Name = "Floof_Rotector_V1"
 gui.ResetOnSpawn = false
 gui.DisplayOrder = 999
 gui.Parent = (gethui and gethui()) or game:GetService("CoreGui") or LocalPlayer:WaitForChild("PlayerGui")
@@ -91,7 +91,7 @@ title.Position = UDim2.new(0, 15, 0, 0)
 title.BackgroundTransparency = 1
 title.Text = "Floof's Rotector Client V.1.0"
 title.TextColor3 = Color3.new(1, 1, 1)
-title.TextSize = 25
+title.TextSize = 22
 title.Font = Enum.Font.GothamBold
 title.TextXAlignment = "Left"
 title.Parent = titleBar
@@ -124,7 +124,7 @@ scroll.Size = SHOW_CONSOLE_BUTTON and UDim2.new(1, -30, 1, -220) or UDim2.new(1,
 scroll.Position = UDim2.new(0, 15, 0, 75)
 scroll.BackgroundTransparency = 1
 scroll.BorderSizePixel = 0
-scroll.ScrollBarThickness = 10
+scroll.ScrollBarThickness = 8
 scroll.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
 scroll.CanvasSize = UDim2.new(0, 0, 0, 0)
 scroll.ZIndex = 5
@@ -200,23 +200,20 @@ local consoleBtn = Instance.new("TextButton")
 if SHOW_CONSOLE_BUTTON then
     consoleBtn.Size = UDim2.new(1, -34, 0, 38)
     consoleBtn.Position = UDim2.new(0, 17, 0, 72)
-    consoleBtn.Text = "SHOW COPYABLE LOGS"
+    consoleBtn.Text = "SHOW LOGS"
     consoleBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     consoleBtn.TextColor3 = Color3.new(1, 1, 1)
     consoleBtn.TextSize = 17
     consoleBtn.Parent = controls
-end
-
---- UI LOGIC ---
-local consoleOpen = false
-if SHOW_CONSOLE_BUTTON then
+    
+    local consoleOpen = false
     consoleBtn.MouseButton1Click:Connect(function()
         consoleOpen = not consoleOpen
         consoleFrame:TweenSize(consoleOpen and UDim2.new(1, -34, 0, 135) or UDim2.new(1, -34, 0, 0), "Out", "Quad", 0.2, true)
         consoleFrame:TweenPosition(consoleOpen and UDim2.new(0, 17, 1, -150) or UDim2.new(0, 17, 1, -17), "Out", "Quad", 0.2, true)
-        controls:TweenPosition(consoleOpen and UDim2.new(0, 0, 1, -270) or UDim2.new(0, 0, 1, -135), "Out", "Quad", 0.2, true)
+        controls:TweenPosition(consoleOpen and UDim2.new(0, 0, 1, -320) or UDim2.new(0, 0, 1, -135), "Out", "Quad", 0.2, true)
         scroll:TweenSize(consoleOpen and UDim2.new(1, -30, 1, -345) or UDim2.new(1, -30, 1, -220), "Out", "Quad", 0.2, true)
-        consoleBtn.Text = consoleOpen and "HIDE COPYABLE LOGS" or "SHOW COPYABLE LOGS"
+        consoleBtn.Text = consoleOpen and "HIDE LOGS" or "SHOW LOGS"
     end)
 end
 
@@ -244,27 +241,13 @@ keyBtn.MouseButton1Click:Connect(function()
     setGui.Parent = (gethui and gethui()) or game:GetService("CoreGui") or LocalPlayer:WaitForChild("PlayerGui")
 
     local setMain = Instance.new("Frame")
-    setMain.Size = UDim2.new(0, 380, 0, 210)
-    setMain.Position = UDim2.new(0.5, -190, 0.5, -105)
+    setMain.Size = UDim2.new(0, 400, 0, 230)
+    setMain.Position = UDim2.new(0.5, -200, 0.5, -115)
     setMain.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
     setMain.BorderSizePixel = 1
     setMain.BorderColor3 = Color3.fromRGB(100, 100, 100)
     setMain.Active = true
     setMain.Parent = setGui
-
-    local sDragging, sDragStart, sStartPos
-    setMain.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            sDragging = true sDragStart = input.Position sStartPos = setMain.Position
-        end
-    end)
-    UserInputService.InputChanged:Connect(function(input)
-        if sDragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-            local delta = input.Position - sDragStart
-            setMain.Position = UDim2.new(sStartPos.X.Scale, sStartPos.X.Offset + delta.X, sStartPos.Y.Scale, sStartPos.Y.Offset + delta.Y)
-        end
-    end)
-    UserInputService.InputEnded:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 then sDragging = false end end)
 
     local header = Instance.new("Frame")
     header.Size = UDim2.new(1, 0, 0, 35)
@@ -282,33 +265,34 @@ keyBtn.MouseButton1Click:Connect(function()
     titleS.TextXAlignment = "Left"
     titleS.Parent = header
 
+    -- RESTORED DISCLAIMER
     local disclaimer = Instance.new("TextLabel")
-    disclaimer.Size = UDim2.new(1, -30, 0, 50)
-    disclaimer.Position = UDim2.new(0, 15, 0, 45)
+    disclaimer.Size = UDim2.new(1, -40, 0, 60)
+    disclaimer.Position = UDim2.new(0, 20, 0, 40)
     disclaimer.BackgroundTransparency = 1
-    disclaimer.Text = "Discord Integration: Enter Discord Bot Token below to allow API Requests to fetch additional account information from a User ID. This token is saved to workspace and is only kept locally."
+    disclaimer.Text = "Discord Integration: Enter a Discord Bot Token below to automatically fetch and display Discord usernames from flagged IDs. Automatically saves for next time."
     disclaimer.TextColor3 = Color3.fromRGB(200, 200, 200)
     disclaimer.TextWrapped = true
-    disclaimer.Font = "Gotham"
-    disclaimer.TextSize = 12
+    disclaimer.Font = Enum.Font.Gotham
+    disclaimer.TextSize = 13
     disclaimer.TextXAlignment = "Left"
     disclaimer.Parent = setMain
 
     local tokenInput = Instance.new("TextBox")
     tokenInput.Size = UDim2.new(1, -30, 0, 34)
-    tokenInput.Position = UDim2.new(0, 15, 0, 105)
+    tokenInput.Position = UDim2.new(0, 15, 0, 110)
     tokenInput.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     tokenInput.Text = DISCORD_TOKEN
     tokenInput.PlaceholderText = "Paste Bot Token Here..."
     tokenInput.TextColor3 = Color3.new(1, 1, 1)
     tokenInput.Font = "Gotham"
-    tokenInput.TextSize = 10
+    tokenInput.TextSize = 12
     tokenInput.ClearTextOnFocus = false
     tokenInput.Parent = setMain
 
     local saveBtn = Instance.new("TextButton")
     saveBtn.Size = UDim2.new(1, -30, 0, 34)
-    saveBtn.Position = UDim2.new(0, 15, 0, 155)
+    saveBtn.Position = UDim2.new(0, 15, 0, 160)
     saveBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 215)
     saveBtn.Text = "SAVE & CLOSE"
     saveBtn.TextColor3 = Color3.new(1, 1, 1)
@@ -319,20 +303,28 @@ keyBtn.MouseButton1Click:Connect(function()
     saveBtn.MouseButton1Click:Connect(function()
         DISCORD_TOKEN = tokenInput.Text
         saveConfig()
-        log("SYSTEM: Discord API Token Updated.")
         setGui:Destroy()
     end)
+    
+    local closeBtn = Instance.new("TextButton")
+    closeBtn.Size = UDim2.new(0, 35, 0, 35)
+    closeBtn.Position = UDim2.new(1, -35, 0, 0)
+    closeBtn.Text = "X"
+    closeBtn.TextColor3 = Color3.new(1, 1, 1)
+    closeBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+    closeBtn.Parent = header
+    closeBtn.MouseButton1Click:Connect(function() setGui:Destroy() end)
 end)
 
 --- POPUP CREATOR (INFRACTIONS) ---
-local function createDetailsPopup(playerName, details)
+local function createDetailsPopup(playerName, details, robloxId)
     local popupGui = Instance.new("ScreenGui")
     popupGui.DisplayOrder = 1005
     popupGui.Parent = (gethui and gethui()) or game:GetService("CoreGui") or LocalPlayer:WaitForChild("PlayerGui")
 
     local popupMain = Instance.new("Frame")
-    popupMain.Size = UDim2.new(0, 440, 0, 270)
-    popupMain.Position = UDim2.new(0.5, -220, 0.5, -135)
+    popupMain.Size = UDim2.new(0, 480, 0, 280)
+    popupMain.Position = UDim2.new(0.5, -240, 0.5, -140)
     popupMain.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
     popupMain.BorderSizePixel = 1
     popupMain.BorderColor3 = Color3.fromRGB(200, 50, 50)
@@ -361,7 +353,7 @@ local function createDetailsPopup(playerName, details)
     local titleP = Instance.new("TextLabel")
     titleP.Size = UDim2.new(1, -50, 1, 0)
     titleP.Position = UDim2.new(0, 12, 0, 0)
-    titleS.BackgroundTransparency = 1 -- Corrected variable reference
+    titleP.BackgroundTransparency = 1
     titleP.Text = "Infractions: " .. playerName
     titleP.TextColor3 = Color3.new(1, 1, 1)
     titleP.Font = Enum.Font.GothamBold
@@ -392,9 +384,24 @@ local function createDetailsPopup(playerName, details)
     listLayout.Padding = UDim.new(0, 8)
     listLayout.Parent = scrollFrame
 
+    -- ROBLOX PROFILE LINK
+    if robloxId then
+        local profileBox = Instance.new("TextBox")
+        profileBox.Size = UDim2.new(1, 0, 0, 20)
+        profileBox.BackgroundTransparency = 1
+        profileBox.Text = "https://www.roblox.com/users/" .. tostring(robloxId) .. "/profile"
+        profileBox.TextColor3 = Color3.fromRGB(0, 170, 255)
+        profileBox.Font = Enum.Font.Code
+        profileBox.TextSize = 12
+        profileBox.TextXAlignment = "Left"
+        profileBox.TextEditable = false
+        profileBox.ClearTextOnFocus = false
+        profileBox.Parent = scrollFrame
+    end
+
     local fullText = ""
     local reasons = details.reasons or {}
-    for category, data in pairs(reasons) do
+    for cat, data in pairs(reasons) do
         if type(data) == "table" then
             local msg = data.message or ""
             local evidenceStr = (data.evidence and type(data.evidence) == "table" and #data.evidence > 0) and (", " .. table.concat(data.evidence, ", ")) or ""
@@ -404,20 +411,17 @@ local function createDetailsPopup(playerName, details)
         end
     end
 
-    if details.isReportable ~= nil then fullText = fullText .. "Reportable: " .. (details.isReportable and "YES" or "NO") .. "\n" end
-    if details.confidence ~= nil then fullText = fullText .. "Confidence: " .. (details.confidence * 100) .. "%" end
-
     local overLabel = Instance.new("TextBox")
     overLabel.Size = UDim2.new(1, -8, 0, 0)
     overLabel.AutomaticSize = Enum.AutomaticSize.Y
     overLabel.BackgroundTransparency = 1
     overLabel.Text = fullText
     overLabel.TextColor3 = Color3.fromRGB(220, 220, 220) 
-    overLabel.Font = Enum.Font.GothamMedium
+    overLabel.Font = "GothamMedium"
     overLabel.TextSize = 13
     overLabel.TextWrapped = true
-    overLabel.TextXAlignment = Enum.TextXAlignment.Left
-    overLabel.TextYAlignment = Enum.TextYAlignment.Top
+    overLabel.TextXAlignment = "Left"
+    overLabel.TextYAlignment = "Top"
     overLabel.TextEditable = false
     overLabel.ClearTextOnFocus = false
     overLabel.Parent = scrollFrame
@@ -433,12 +437,18 @@ local function createDetailsPopup(playerName, details)
                         Headers = { ["Authorization"] = "Bot " .. DISCORD_TOKEN }
                     })
                 end)
-                if success and response.StatusCode == 200 then
+               if success and response.StatusCode == 200 then
                     local d = HttpService:JSONDecode(response.Body)
-                    local ts = (tonumber(discordId) / 2^22) + 1420070400000
-                    local ds = os.date("!%Y-%m-%d UTC", ts / 1000)
-                    local block = "--- DISCORD DATA ---\n" .. "User: @" .. (d.username or "N/A") .. " | ID: " .. discordId .. "\nCreated: " .. ds .. "\n\n"
-                    overLabel.Text = block .. fullText
+                    local avatarLink = d.avatar and string.format("https://cdn.discordapp.com/avatars/%s/%s.png?size=512", discordId, d.avatar) or "No Custom Avatar"
+                    local block = "--- DISCORD DATA ---\n"
+                    local alert = "Note: The specific groups or servers a user are in are only visible on their web profile.\n"
+                    block = block .. "Username: @" .. (d.username or "N/A") .. "\n"
+                    block = block .. "Global Name: " .. (d.global_name or "N/A") .. "\n"
+                    block = block .. "ID: " .. discordId .. "\n"
+                    block = block .. "PFP: " .. avatarLink .. "\n\n"
+                    overLabel.Text = block .. alert .. fullText
+                else
+                    overLabel.Text = "--- DISCORD ACCOUNT DATA ---\n[Failed to fetch - Verify Token]\n\n" .. fullText
                 end
             end)
         end
@@ -492,7 +502,7 @@ local function createEntry(name, display, id, status, color, details)
         viewBtn.TextColor3 = Color3.new(1, 1, 1)
         viewBtn.ZIndex = 10 
         viewBtn.Parent = entry
-        viewBtn.MouseButton1Click:Connect(function() createDetailsPopup(display .. " (@" .. name .. ")", details) end)
+        viewBtn.MouseButton1Click:Connect(function() createDetailsPopup(display .. " (@" .. name .. ")", details, id) end)
     end
 end
 
@@ -522,10 +532,7 @@ scanBtn.MouseButton1Click:Connect(function()
             end)
             if success and response.StatusCode == 200 then
                 local res = HttpService:JSONDecode(response.Body)
-                
-                -- NEW DUMP LOGIC: Dumps full API data to copyable log
                 log("API_DATA DUMP: " .. HttpService:JSONEncode(res))
-                
                 for id, det in pairs(res.data) do
                     local p = infoMap[tostring(id)]
                     if p then
