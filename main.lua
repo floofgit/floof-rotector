@@ -286,7 +286,7 @@ keyBtn.MouseButton1Click:Connect(function()
     disclaimer.Size = UDim2.new(1, -30, 0, 50)
     disclaimer.Position = UDim2.new(0, 15, 0, 45)
     disclaimer.BackgroundTransparency = 1
-    disclaimer.Text = "Discord Integration: Enter Bot Token below to fetch usernames. This is saved to workspace."
+    disclaimer.Text = "Discord Integration: Enter Discord Bot Token below to allow API Requests to fetch additional account information from a User ID. This token is saved to workspace and is only kept locally."
     disclaimer.TextColor3 = Color3.fromRGB(200, 200, 200)
     disclaimer.TextWrapped = true
     disclaimer.Font = "Gotham"
