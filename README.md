@@ -1,11 +1,11 @@
 --this is just something i made for fun to make rotector easier to use
 --does what it says on the tin it scans whole servers for flagged users
---99.83% AI Written thanks to gemini i would code if i could <3 i've written some of it at least
+--mostly vibe coded thanks to gemini i would code if i could <3 i've written some of it at least
 --but it works yeah it's pretty good it's based around the rotector api
 --available at https://roscoe.rotector.com/docs
 --the extension they made for your browser is at https://rotector.com/
 --lots of love
---currently at V.1.1 as of april 2nd 2026 14:04 BST
+--currently at V.1.2 as of april 2nd 2026 20:02 BST
 
 
 THE SCRIPT
