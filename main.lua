@@ -24,17 +24,17 @@ local enableiy = true -- enables automatically executing infinite yield
 local hidecleanusers = true -- if true, only flagged users will appear
 -- ADDONS OR WHATEVER LOL --
 if CHAT_ALERTS then
-    game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("[ROTECTOR CLIENT V.1.0] Client Successfully Loaded!")
+    game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("[ROTECTOR CLIENT V.1.1] Client Successfully Loaded!")
 end
 
 if enablebrowser and CHAT_ALERTS then
     loadstring(game:HttpGet("https://raw.githubusercontent.com/RealBatu20/AI-Scripts-2025/refs/heads/main/ServerBrowserImproved.lua"))()
-    game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("[ROTECTOR CLIENT V.1.0] Server Browser Loaded!")
+    game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("[ROTECTOR CLIENT V.1.1] Server Browser Loaded!")
 end
 
 if enableiy and CHAT_ALERTS then
     loadstring(game:HttpGet("https://raw.githubusercontent.com/DarkNetworks/Infinite-Yield/main/latest.lua"))()
-    game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("[ROTECTOR CLIENT V.1.0] IY Loaded!")
+    game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("[ROTECTOR CLIENT V.1.1] IY Loaded!")
 end
 -- FILE SAVING LOGIC
 local function saveConfig()
@@ -105,7 +105,7 @@ local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, -120, 1, 0)
 title.Position = UDim2.new(0, 15, 0, 0)
 title.BackgroundTransparency = 1
-title.Text = "Floof's Rotector Client V.1.0"
+title.Text = "Floof's Rotector Client V.1.1"
 title.TextColor3 = Color3.new(1, 1, 1)
 title.TextSize = 22
 title.Font = Enum.Font.GothamBold
@@ -526,7 +526,7 @@ scanBtn.MouseButton1Click:Connect(function()
     local genChannel = TextChatService.TextChannels:FindFirstChild("RBXGeneral")
     
     if CHAT_ALERTS and genChannel then
-        genChannel:SendAsync("[ROTECTOR CLIENT V.1.0, POWERED BY THE ROTECTOR API] [⚠️] Scanning Server...")
+        genChannel:SendAsync("[ROTECTOR CLIENT V.1.1, POWERED BY THE ROTECTOR API] [⚠️] Scanning Server...")
     end
 
     log("SYSTEM: Initializing Scan...")
@@ -587,11 +587,11 @@ end
         if CHAT_ALERTS and genChannel then
             local count = #flaggedUsernames
             local emoji = count > 0 and "⛔" or "✅"
-            genChannel:SendAsync(string.format("[RTC V.1.0] [%s] Scan Complete! %d flagged users detected!", emoji, count))
+            genChannel:SendAsync(string.format("[RTC V.1.1] [%s] Scan Complete! %d flagged users detected!", emoji, count))
             
             if count > 0 then
                 local nameList = table.concat(flaggedUsernames, '", "')
-                genChannel:SendAsync(string.format('[RTC V.1.0] [🚨] Flagged Users: "%s"', nameList))
+                genChannel:SendAsync(string.format('[RTC V.1.1] [🚨] Flagged Users: "%s"', nameList))
             end
         end
 
