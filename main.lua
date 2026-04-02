@@ -511,7 +511,7 @@ local function createEntry(name, display, id, status, color, details)
         viewBtn.Size = UDim2.new(0, 150, 0, 38)
         viewBtn.Position = UDim2.new(1, -160, 0, 52)
         viewBtn.Text = "VIEW DETAILS"
-        viewBtn.TextSize = 17
+        viewBtn.TextSize = 15
         viewBtn.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
         viewBtn.TextColor3 = Color3.new(1, 1, 1)
         viewBtn.ZIndex = 10 
