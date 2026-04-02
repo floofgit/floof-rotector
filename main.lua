@@ -5,7 +5,8 @@
 --available at https://roscoe.rotector.com/docs
 --the extension they made for your browser is at https://rotector.com/
 --lots of love
---currently at V.1.0 as of april 1st 2026 20:45 BST
+--currently at V.1.1 as of april 2nd 2026 14:04 BST
+--also, please read the config settings at the top there's some stuff there
 
 local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService")
@@ -13,12 +14,28 @@ local UserInputService = game:GetService("UserInputService")
 local LocalPlayer = Players.LocalPlayer
 
 local request = (syn and syn.request) or (http and http.request) or http_request or request
-print("Current JobId: " .. game.JobId)
--- // CONFIGURATION
-local SHOW_CONSOLE_BUTTON = false -- this shows the log console i guess 
-local FILE_NAME = "rotector-client-discord-bot-token-for-api-lmao.json"
-local DISCORD_TOKEN = ""
+-- CONFIGURATION
+local SHOW_CONSOLE_BUTTON = true -- this shows the log console if you're curious
+local CHAT_ALERTS = true -- toggle this to false to turn off chatting the status of the scans
+local FILE_NAME = "rotector-client-discord-bot-token-for-api-lmao.json" 
+local DISCORD_TOKEN = "" --OPTIONAL BTW!! this won't steal your account or anything, it's just to make api requests to discord to get people's usernames from their user id
+local enablebrowser = true -- enables automatically executing a server browser
+local enableiy = true -- enables automatically executing infinite yield 
+local hidecleanusers = true -- if true, only flagged users will appear
+-- ADDONS OR WHATEVER LOL --
+if CHAT_ALERTS then
+    game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("[ROTECTOR CLIENT V.1.0] Client Successfully Loaded!")
+end
 
+if enablebrowser and CHAT_ALERTS then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/RealBatu20/AI-Scripts-2025/refs/heads/main/ServerBrowserImproved.lua"))()
+    game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("[ROTECTOR CLIENT V.1.0] Server Browser Loaded!")
+end
+
+if enableiy and CHAT_ALERTS then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/DarkNetworks/Infinite-Yield/main/latest.lua"))()
+    game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("[ROTECTOR CLIENT V.1.0] Infinite Yield Loaded!")
+end
 -- FILE SAVING LOGIC
 local function saveConfig()
     local data = {token = DISCORD_TOKEN}
@@ -27,7 +44,7 @@ local function saveConfig()
         writefile(FILE_NAME, encoded)
     end
 end
-
+print("Current JobId: " .. game.JobId)
 local function loadConfig()
     if readfile and isfile and isfile(FILE_NAME) then
         local success, content = pcall(function() return readfile(FILE_NAME) end)
@@ -150,14 +167,14 @@ consoleFrame.Parent = main
 
 local debugScroll = Instance.new("ScrollingFrame")
 debugScroll.Size = UDim2.new(1, -15, 1, -15)
-debugScroll.Position = UDim2.new(0, 8, 0, 8)
+debugScroll.Position = UDim2.new(0, 10, 0, 10)
 debugScroll.BackgroundTransparency = 1
 debugScroll.ScrollBarThickness = 5
 debugScroll.AutomaticCanvasSize = Enum.AutomaticSize.XY
 debugScroll.Parent = consoleFrame
 
 local consoleBox = Instance.new("TextBox")
-consoleBox.Size = UDim2.new(1, -8, 1, -8)
+consoleBox.Size = UDim2.new(1, -10, 1, -10)
 consoleBox.AutomaticSize = Enum.AutomaticSize.XY 
 consoleBox.BackgroundTransparency = 1
 consoleBox.Text = ""
@@ -264,10 +281,9 @@ keyBtn.MouseButton1Click:Connect(function()
     titleS.TextXAlignment = "Left"
     titleS.Parent = header
 
-    -- RESTORED DISCLAIMER
     local disclaimer = Instance.new("TextLabel")
     disclaimer.Size = UDim2.new(1, -40, 0, 60)
-    disclaimer.Position = UDim2.new(0, 20, 0, 40)
+    disclaimer.Position = UDim2.new(0, 20, 0, 50)
     disclaimer.BackgroundTransparency = 1
     disclaimer.Text = "Discord Integration: Enter a Discord Bot Token below to automatically fetch and display Discord usernames from flagged IDs. Automatically saves for next time."
     disclaimer.TextColor3 = Color3.fromRGB(200, 200, 200)
@@ -383,7 +399,6 @@ local function createDetailsPopup(playerName, details, robloxId)
     listLayout.Padding = UDim.new(0, 8)
     listLayout.Parent = scrollFrame
 
-    -- ROBLOX PROFILE LINK
     if robloxId then
         local profileBox = Instance.new("TextBox")
         profileBox.Size = UDim2.new(1, 0, 0, 20)
@@ -507,16 +522,27 @@ end
 
 --- SCAN LOGIC ---
 scanBtn.MouseButton1Click:Connect(function()
+    local TextChatService = game:GetService("TextChatService")
+    local genChannel = TextChatService.TextChannels:FindFirstChild("RBXGeneral")
+    
+    if CHAT_ALERTS and genChannel then
+        genChannel:SendAsync("[ROTECTOR CLIENT V.1.0, POWERED BY THE ROTECTOR API] [⚠️] Scanning Server...")
+    end
+
     log("SYSTEM: Initializing Scan...")
     scanBtn.Text = "WORKING..."
     scanBtn.Active = false
     for _, v in pairs(scroll:GetChildren()) do if v:IsA("Frame") then v:Destroy() end end
+    
     local pList = Players:GetPlayers()
     local ids, infoMap = {}, {}
+    local flaggedUsernames = {}
+
     for _, p in pairs(pList) do
         table.insert(ids, p.UserId)
         infoMap[tostring(p.UserId)] = {n = p.Name, d = p.DisplayName}
     end
+
     task.spawn(function()
         for i = 1, #ids, 20 do
             local batch = {}
@@ -537,13 +563,38 @@ scanBtn.MouseButton1Click:Connect(function()
                     if p then
                         local f = det.flagType
                         local flagged = f and (f ~= 0 and f ~= 3 and f ~= 6)
-                        createEntry(p.n, p.d, id, flagged and "FLAGGED" or "CLEAN", flagged and Color3.new(1, 0.2, 0.2) or Color3.new(0.2, 1, 0.4), det)
+                        if flagged then
+                            table.insert(flaggedUsernames, p.n)
+                        end
+                        if not hidecleanusers or flagged then
+                        createEntry(
+                        p.n,
+                        p.d,
+                        id,
+                        flagged and "FLAGGED" or "CLEAN",
+                        flagged and Color3.new(1, 0.2, 0.2) or Color3.new(0.2, 1, 0.4),
+                        det
+            )
+end
                     end
                 end
             end
             task.wait(0.2)
         end
+        
         log("SCAN COMPLETE.")
+        
+        if CHAT_ALERTS and genChannel then
+            local count = #flaggedUsernames
+            local emoji = count > 0 and "⛔" or "✅"
+            genChannel:SendAsync(string.format("[RTC V.1.0] [%s] Scan Complete! %d flagged users detected!", emoji, count))
+            
+            if count > 0 then
+                local nameList = table.concat(flaggedUsernames, '", "')
+                genChannel:SendAsync(string.format('[RTC V.1.0] [🚨] Flagged Users: "%s"', nameList))
+            end
+        end
+
         updateCanvas()
         scanBtn.Text = "Scan Server"
         scanBtn.Active = true
