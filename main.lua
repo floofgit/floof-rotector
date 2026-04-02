@@ -34,7 +34,7 @@ end
 
 if enableiy and CHAT_ALERTS then
     loadstring(game:HttpGet("https://raw.githubusercontent.com/DarkNetworks/Infinite-Yield/main/latest.lua"))()
-    game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("[ROTECTOR CLIENT V.1.0] Infinite Yield Loaded!")
+    game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("[ROTECTOR CLIENT V.1.0] IY Loaded!")
 end
 -- FILE SAVING LOGIC
 local function saveConfig()
