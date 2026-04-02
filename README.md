@@ -6,13 +6,16 @@
 --the extension they made for your browser is at https://rotector.com/
 --lots of love
 --currently at V.1.1 as of april 2nd 2026 14:04 BST
---also, please read the config settings at the top there's some stuff there
+
 
 THE SCRIPT
 -----------------------------------------------------------------------------------------------------------------
 loadstring(game:HttpGet("https://raw.githubusercontent.com/floofgit/floof-rotector/refs/heads/main/main.lua"))()
 -----------------------------------------------------------------------------------------------------------------
 paste that into your executor and run
+
+theres some config settings you can only adjust by pasting the raw script from main.lua if you wanna customise stuff like turning on and off the chat setting,
+making it display clean users, enabling it also executing some additional helpful scripts, etc etc
 
 you can add a discord bot token to the gui and it'll fetch the user in question's display name, pfp, and username from discord along with their moderation results
 this is different from your discord account token, it's completely safe to add and you can read the code if you don't trust me lmao
