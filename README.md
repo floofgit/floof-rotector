@@ -12,7 +12,7 @@ THE SCRIPT
 -----------------------------------------------------------------------------------------------------------------
 loadstring(game:HttpGet("https://raw.githubusercontent.com/floofgit/floof-rotector/refs/heads/main/main.lua"))()
 -----------------------------------------------------------------------------------------------------------------
-paste that into your executor and run
+paste that into your executor and run (i personally use solara but i hear potassium is good)
 
 theres some config settings you can only adjust by pasting the raw script from main.lua if you wanna customise stuff like turning on and off the chat setting,
 making it display clean users, enabling it also executing some additional helpful scripts, etc etc
